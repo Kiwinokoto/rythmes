@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 include("functions.php");
 
 setInitialValues("tempo", 30); // create session variables
-setInitialValues("nbTracks", 0);
+setInitialValues("tracks_nb", 0);
 // setInitialValues("nbHidden", $_SESSION["nbSensors"] + 1);
 
 // $_SESSION["firstTime"] = true;
@@ -37,8 +37,9 @@ setInitialValues("nbTracks", 0);
             </div>
 
             <div class="param">
-                <label for="tracks">Number of Tracks:</label>
-                <span id="tracks_nb"><?php echo $_SESSION['nbTracks']; ?></span>
+                <span id="tracks_nb">
+                    Number of Tracks:<?php echo " " . $_SESSION['tracks_nb']; ?>
+                </span>
             </div>
 
             <div class="param" id="new_track">
@@ -51,7 +52,7 @@ setInitialValues("nbTracks", 0);
         </form>
 
     </div>
-    <?php phpToJs('nbTracks'); ?>
+    <?php phpToJs('tracks_nb'); ?>
     <script src="script.js"></script>
 </body>
 </html>

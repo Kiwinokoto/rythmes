@@ -1,4 +1,7 @@
 var addTrackButton = document.getElementById("new_track");
+var playButton = document.getElementById("playButton");
+var tracksSpan = document.getElementById("tracks_nb");
+var nbTracks = tracks_nb + 1; // = 0 + 1
 
 function createTrack() {
     // this.number = 42
@@ -8,43 +11,47 @@ function createTrack() {
 addTrackButton.addEventListener("click", function (event) {
     // event.preventDefault(); // Not necessary here (button)
 
-    track_nb = nbTracks + 1;
-    // alert(track_nb);
-
     // create a new track (form input)
     var div = document.createElement("div");
+    div.id = "trackDiv-" + nbTracks;
+    div.beat = 2 + nbTracks;
     div.className = "param";
     div.isAdded = false;
 
-    var labelTrack = document.createElement("label");
-    labelTrack.innerHTML = "Track " + track_nb + ": ";
-    div.appendChild(labelTrack);
+    var spanTrack = document.createElement("span");
+    spanTrack.innerHTML = "Track " + nbTracks + ": ";
 
     var labelBeat = document.createElement("label");
-    labelBeat.setAttribute("for", "beat-" + track_nb);
+    labelBeat.setAttribute("for", "beat-" + nbTracks);
     labelBeat.innerHTML = "Beat ";
-    div.appendChild(labelBeat);
+    spanTrack.appendChild(labelBeat);
 
     var inputBeat = document.createElement("input");
     inputBeat.type = "number";
-    inputBeat.setAttribute("name", "beat-" + track_nb);
-    inputBeat.setAttribute("id", "beat-" + track_nb); // Set an ID to match the 'for' attribute in the label
-    div.appendChild(inputBeat);
+    inputBeat.setAttribute("name", "beat-" + nbTracks);
+    inputBeat.id = "beat-" + nbTracks; // Set an ID to match the 'for' attribute in the label
+    inputBeat.value = div.beat;
+    spanTrack.appendChild(inputBeat);
 
+    div.appendChild(spanTrack);
     // insert it
     addTrackButton.parentNode.insertBefore(div, addTrackButton);
     //
-    var playButton = document.getElementById("playButton");
-    playButton.setAttribute("title", "Choose a beat (>0)");
+    var value = inputBeat.value; // Get the final value after user has finished typing
+    if (value && !div.isAdded) {
+        div.isAdded = true;
+        playButton.setAttribute("title", "Almost done!");
+        // alert("Final value: " + value);
+        // increment track_nb
+        nbTracks += 1;
+        tracksSpan.innerHTML = "Number of Tracks: " + (nbTracks - 1);
+    }
+    // draw cirle
 
-    // Add event listener to inputBeat to detect when the field is filled
+    // Add event listener to inputBeat to detect when the field is modified
     inputBeat.addEventListener("change", function () {
-        var value = inputBeat.value; // Get the final value after user has finished typing
-        if (value) {
-            playButton.setAttribute("title", "Well done!");
-            // alert("Final value: " + value);
-            // increment nb tracks
-        }
+        // new value
+        // redraw circle
     });
 });
 
