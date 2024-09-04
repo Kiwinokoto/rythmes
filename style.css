@@ -1,0 +1,35 @@
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: black;
+    color: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: justify;
+    font-size: clamp(1rem, 1.5rem, 2rem);
+    font-family: 'Alegreya-Regular', serif;
+}
+
+.settings {
+    max-width: 25%;
+    margin: 1em 0em 0em 0.5em; /* hdbg trbl */
+    color: #7d2939;
+    border: 5px #7d2939 solid;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.92);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.param{
+    padding: 1em 0em 0em 1em;
+}
+.play{
+    padding: 1em 0em 1em 1em;
+}
+#tracks_nb{
+    color: black;
+}
