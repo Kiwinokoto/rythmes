@@ -1,19 +1,40 @@
+:root {
+    --track-width: 30%;
+    --track-height: 20%;
+    --test-color: black;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     padding: 0px;
     margin: 0px;
-    background-color: black;
+    background-color: var(--test-color);
     color: white;
     overflow-y: scroll;
     overflow-x: hidden;
     text-align: justify;
     font-size: clamp(1rem, 1.5rem, 2rem);
-    font-family: 'Alegreya-Regular', serif;
+    font-family: "Alegreya-Regular", serif;
+}
+
+.page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+input[type="number"] {
+    width: 3em;
 }
 
 .settings {
     max-width: 25%;
-    margin: 1em 0em 0em 0.5em; /* hdbg trbl */
     color: #7d2939;
     border: 5px #7d2939 solid;
     text-align: center;
@@ -24,12 +45,74 @@ body {
     align-items: center;
 }
 
-.param{
-    padding: 1em 0em 0em 1em;
+.param {
+    padding: 1em 1em 0em 1em; /* hdbg trbl */
 }
-.play{
-    padding: 1em 0em 1em 1em;
+.play {
+    padding: 1em 1em 1em 1em;
 }
-#tracks_nb{
+#tracks_nb {
     color: black;
+}
+
+.player {
+    width: 25em;
+    height: 25em;
+    border: 5px solid lightblue;
+}
+
+#needle {
+    position: absolute; /* Absolute positioning for better control */
+    width: 0.2em;
+    height: 2em;
+    background-color: green;
+    top: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotate(0deg); /* Center the needle properly */
+}
+
+#needleCenter {
+    position: absolute; /* Absolute positioning for better control */
+    width: 0.5em;
+    height: 0.5em;
+    background-color: silver;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the circle */
+}
+#firstTrack {
+    position: absolute; /* Absolute positioning for better control */
+    width: 6em;
+    height: 6em;
+    border: 1px solid silver;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the track */
+}
+.beat {
+    position: absolute; /* Absolute positioning for better control */
+    width: 1em;
+    height: 1em;
+    border: 1px solid silver;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    background-color: var(--test-color);
+}
+
+.sons {
+    max-width: 25%;
+    margin: 1em 0em 0em 0.5em; /* hdbg trbl */
+    color: #7d2939;
+    border: 5px #7d2939 solid;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.92);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }

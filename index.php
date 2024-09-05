@@ -27,13 +27,13 @@ setInitialValues("tracks_nb", 0);
     <!-- <link rel="icon" type="image/png" href="./pics/favicon.png" /> -->
 </head>
 <body>
-    <div class="global">
+    <div class="page">
 
         <form class="settings">
             <div class="param">
                 <label for="tempo">Tempo (BPM):</label>
                 <input type="number" id="tempo" name="tempo"
-                value = "<?php echo $_SESSION["tempo"]; ?>" required>
+                value = "<?php echo $_SESSION["tempo"]; ?>" min="1" required>
             </div>
 
             <div class="param">
@@ -50,6 +50,20 @@ setInitialValues("tracks_nb", 0);
                 <button type="button" id="playButton" title="Add a track first" disabled >Play</button>
             </div>
         </form>
+
+        <div class="player">
+            <div id="needle"></div>
+            <div id="needleCenter"></div>
+            <div id="firstTrack">
+                <div class="beat" id="track1Beat1"></div>
+                <div class="beat" id="track1Beat2"></div>
+                <div class="beat" id="track1Beat3"></div>
+            </div>
+        </div>
+
+        <div class="sons">
+            <p>in a moment</p>
+        </div>
 
     </div>
     <?php phpToJs('tracks_nb'); ?>

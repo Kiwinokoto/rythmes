@@ -1,57 +1,83 @@
-var addTrackButton = document.getElementById("new_track");
-var playButton = document.getElementById("playButton");
-var tracksSpan = document.getElementById("tracks_nb");
-var nbTracks = tracks_nb + 1; // = 0 + 1
-
-function createTrack() {
-    // this.number = 42
-    // this.beat = diameter;
-}
-
-addTrackButton.addEventListener("click", function (event) {
-    // event.preventDefault(); // Not necessary here (button)
-
-    // create a new track (form input)
-    var div = document.createElement("div");
-    div.id = "trackDiv-" + nbTracks;
-    div.beat = 2 + nbTracks;
-    div.className = "param";
-    div.isAdded = false;
-
-    var spanTrack = document.createElement("span");
-    spanTrack.innerHTML = "Track " + nbTracks + ": ";
-
-    var labelBeat = document.createElement("label");
-    labelBeat.setAttribute("for", "beat-" + nbTracks);
-    labelBeat.innerHTML = "Beat ";
-    spanTrack.appendChild(labelBeat);
-
-    var inputBeat = document.createElement("input");
-    inputBeat.type = "number";
-    inputBeat.setAttribute("name", "beat-" + nbTracks);
-    inputBeat.id = "beat-" + nbTracks; // Set an ID to match the 'for' attribute in the label
-    inputBeat.value = div.beat;
-    spanTrack.appendChild(inputBeat);
-
-    div.appendChild(spanTrack);
-    // insert it
-    addTrackButton.parentNode.insertBefore(div, addTrackButton);
+document.addEventListener("DOMContentLoaded", () => {
     //
-    var value = inputBeat.value; // Get the final value after user has finished typing
-    if (value && !div.isAdded) {
-        div.isAdded = true;
-        playButton.setAttribute("title", "Almost done!");
-        // alert("Final value: " + value);
-        // increment track_nb
-        nbTracks += 1;
-        tracksSpan.innerHTML = "Number of Tracks: " + (nbTracks - 1);
-    }
-    // draw cirle
+    var addTrackButton = document.getElementById("new_track"),
+        playButton = document.getElementById("playButton"),
+        tracksSpan = document.getElementById("tracks_nb"),
+        nbTracks = tracks_nb + 1, // = 0 + 1
+        xcentre = screen.availWidth / 2,
+        ycentre = screen.availHeight / 2,
+        unit = screen.availWidth / 16,
+        needle = document.getElementById("needle"),
+        track1 = document.getElementById("firstTrack"),
+        beats = document.querySelectorAll(".beat"),
+        trackRadius = track1.offsetWidth / 2, // Radius of the track
+        centerX = track1.offsetWidth / 2, // Center X of the track
+        centerY = track1.offsetHeight / 2, // Center Y of the track
+        angleIncrement = 360 / beats.length; // Angle between each beat
 
-    // Add event listener to inputBeat to detect when the field is modified
-    inputBeat.addEventListener("change", function () {
-        // new value
-        // redraw circle
+    beats.forEach((beat, index) => {
+        var angle = angleIncrement * index; // Angle for current beat
+        var x = trackRadius * Math.cos((angle * Math.PI) / 180); // X position
+        var y = trackRadius * Math.sin((angle * Math.PI) / 180); // Y position
+
+        // Position the beat
+        beat.style.transform = `translate(${centerX + x}px, ${centerY + y}px)`; // almost there
+    });
+
+    function createNeedle() {
+        // delete previous needle ?
+    }
+
+    function createTrack(division, orbit) {
+        // this.number = 42
+        // this.beat = diameter;
+    }
+
+    addTrackButton.addEventListener("click", function (event) {
+        // event.preventDefault(); // Not necessary here (button)
+
+        // create a new track (form input)
+        var div = document.createElement("div");
+        div.id = "trackDiv-" + nbTracks;
+        div.beat = 2 + nbTracks;
+        div.className = "param";
+        div.isAdded = false;
+
+        var spanTrack = document.createElement("span");
+        spanTrack.innerHTML = "Track " + nbTracks + ": ";
+
+        var labelBeat = document.createElement("label");
+        labelBeat.setAttribute("for", "beat-" + nbTracks);
+        labelBeat.innerHTML = "Beat ";
+        spanTrack.appendChild(labelBeat);
+
+        var inputBeat = document.createElement("input");
+        inputBeat.type = "number";
+        inputBeat.setAttribute("name", "beat-" + nbTracks);
+        inputBeat.id = "beat-" + nbTracks; // Set an ID to match the 'for' attribute in the label
+        inputBeat.value = div.beat;
+        spanTrack.appendChild(inputBeat);
+
+        div.appendChild(spanTrack);
+        // insert it
+        addTrackButton.parentNode.insertBefore(div, addTrackButton);
+        //
+        var value = inputBeat.value; // Get the final value after user has finished typing
+        if (value && !div.isAdded) {
+            div.isAdded = true;
+            playButton.setAttribute("title", "Almost done!");
+            // alert("Final value: " + value);
+            // increment track_nb
+            nbTracks += 1;
+            tracksSpan.innerHTML = "Number of Tracks: " + (nbTracks - 1);
+        }
+        // draw cirle
+
+        // Add event listener to inputBeat to detect when the field is modified
+        inputBeat.addEventListener("change", function () {
+            // new value
+            // redraw circle
+        });
     });
 });
 
