@@ -3,26 +3,44 @@ document.addEventListener("DOMContentLoaded", () => {
     var addTrackButton = document.getElementById("new_track"),
         playButton = document.getElementById("playButton"),
         tracksSpan = document.getElementById("tracks_nb"),
+        player = document.getElementById("player"),
         nbTracks = tracks_nb + 1, // = 0 + 1
-        xcentre = screen.availWidth / 2,
-        ycentre = screen.availHeight / 2,
+        screenCentreX = screen.availWidth / 2,
+        screenCentreY = screen.availHeight / 2,
         unit = screen.availWidth / 16,
         needle = document.getElementById("needle"),
         track1 = document.getElementById("firstTrack"),
-        beats = document.querySelectorAll(".beat"),
-        trackRadius = track1.offsetWidth / 2, // Radius of the track
-        centerX = track1.offsetWidth / 2, // Center X of the track
-        centerY = track1.offsetHeight / 2, // Center Y of the track
-        angleIncrement = 360 / beats.length; // Angle between each beat
+        beats = document.querySelectorAll(".beat");
+
+    const root = document.documentElement;
+
+    // function add track
+    // commencer par le cercle
+
+    const trackRect = track1.getBoundingClientRect(); // Get position and size of the track
+    console.log("Top:", trackRect.top);
+    console.log("Right:", trackRect.right);
+    console.log("Bottom:", trackRect.bottom);
+    console.log("Left:", trackRect.left);
+    console.log("Width:", trackRect.width);
+    console.log("Height:", trackRect.height); // ok
+
+    const trackRadius = Math.min(trackRect.width, trackRect.height) / 2; // same anyway
+    const centerX = trackRect.left + trackRadius; // Center X of the track, accounting for its position
+    const centerY = trackRect.top + trackRadius; // Center Y of the track, accounting for its position
+    const beatRadius = parseFloat(getComputedStyle(beats[0]).width) / 2; // Radius of the beat
+    console.log("beatRadius:", beatRadius);
+    const angleIncrement = 360 / beats.length; // Angle between each beat, en degrés comme css
 
     beats.forEach((beat, index) => {
-        var angle = angleIncrement * index; // Angle for current beat
-        var x = trackRadius * Math.cos((angle * Math.PI) / 180); // X position
-        var y = trackRadius * Math.sin((angle * Math.PI) / 180); // Y position
+        const angle = angleIncrement * index - 90; // Angle for current beat, + rotation
+        const x = trackRadius * Math.cos((angle * Math.PI) / 180); // X position relative en radian (trigo)
+        const y = trackRadius * Math.sin((angle * Math.PI) / 180); // Y position relative to the center
 
         // Position the beat
-        beat.style.transform = `translate(${centerX + x}px, ${centerY + y}px)`; // almost there
-    });
+        beat.style.position = "absolute";
+        beat.style.transform = `translate(${x - beatRadius}px, ${y - beatRadius}px)`;
+    }); // fin fonction. facto !!
 
     function createNeedle() {
         // delete previous needle ?
@@ -70,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // increment track_nb
             nbTracks += 1;
             tracksSpan.innerHTML = "Number of Tracks: " + (nbTracks - 1);
+            root.style.setProperty("--beat-color", "silver");
         }
         // draw cirle
 

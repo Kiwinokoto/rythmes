@@ -2,6 +2,7 @@
     --track-width: 30%;
     --track-height: 20%;
     --test-color: black;
+    --beat-color: black;
 }
 
 * {
@@ -65,44 +66,56 @@ input[type="number"] {
     position: absolute; /* Absolute positioning for better control */
     width: 0.2em;
     height: 2em;
-    background-color: green;
+    background-color: var(--beat-color);
     top: 50%;
     left: 50%;
     transform-origin: bottom center;
-    transform: translate(-50%, -100%) rotate(0deg); /* Center the needle properly */
+    transform: translate(-50%, -100%) rotate(0deg);
 }
 
 #needleCenter {
-    position: absolute; /* Absolute positioning for better control */
+    position: absolute;
     width: 0.5em;
     height: 0.5em;
-    background-color: silver;
+    background-color: var(--beat-color);
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Center the circle */
+    transform: translate(-50%, -50%);
 }
 #firstTrack {
-    position: absolute; /* Absolute positioning for better control */
+    position: absolute;
     width: 6em;
     height: 6em;
-    border: 1px solid silver;
+    border: 1px solid var(--beat-color);
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Center the track */
+    transform: translate(-50%, -50%);
 }
 .beat {
-    position: absolute; /* Absolute positioning for better control */
+    position: absolute;
     width: 1em;
     height: 1em;
-    border: 1px solid silver;
+    border: 1px solid var(--beat-color);
     border-radius: 50%;
     top: 50%;
     left: 50%;
     z-index: 5;
     background-color: var(--test-color);
+    transform: translate(-50%, -50%);
 }
+/*
+#track1Beat1 {
+    background-color: red;
+}
+#track1Beat2 {
+    background-color: green;
+}
+#track1Beat3 {
+    background-color: blue;
+}
+*/
 
 .sons {
     max-width: 25%;
