@@ -51,14 +51,9 @@ setInitialValues("tracks_nb", 0);
             </div>
         </form>
 
-        <div class="player">
+        <div id="player">
             <div id="needle"></div>
             <div id="needleCenter"></div>
-            <div id="firstTrack">
-                <div class="beat" id="track1Beat1"></div>
-                <div class="beat" id="track1Beat2"></div>
-                <div class="beat" id="track1Beat3"></div>
-            </div>
         </div>
 
         <div class="sons">

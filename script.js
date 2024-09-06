@@ -4,51 +4,108 @@ document.addEventListener("DOMContentLoaded", () => {
         playButton = document.getElementById("playButton"),
         tracksSpan = document.getElementById("tracks_nb"),
         player = document.getElementById("player"),
-        nbTracks = tracks_nb + 1, // = 0 + 1
+        nbTracks = 1,
         screenCentreX = screen.availWidth / 2,
         screenCentreY = screen.availHeight / 2,
         unit = screen.availWidth / 16,
-        needle = document.getElementById("needle"),
-        track1 = document.getElementById("firstTrack"),
-        beats = document.querySelectorAll(".beat");
+        rythmPattern = [];
 
     const root = document.documentElement;
 
     // function add track
-    // commencer par le cercle
+    // Function to create and add a track with beats
+    function createTrackWithBeats(trackNum, beatCount) {
+        // delete if already exists
+        const existingTrack = document.getElementById("track" + trackNum);
+        if (existingTrack) {
+            existingTrack.remove(); // Remove the pre-existing track
+            // rythmPattern[trackNum] ? ;
+        }
 
-    const trackRect = track1.getBoundingClientRect(); // Get position and size of the track
-    console.log("Top:", trackRect.top);
-    console.log("Right:", trackRect.right);
-    console.log("Bottom:", trackRect.bottom);
-    console.log("Left:", trackRect.left);
-    console.log("Width:", trackRect.width);
-    console.log("Height:", trackRect.height); // ok
+        // Create the track container
+        const track = document.createElement("div");
+        track.id = "track" + trackNum;
+        track.className = "track"; // Add a class to apply CSS styles if needed
+        track.style.position = "absolute";
+        track.style.width = 5 + trackNum * 2.5 + "em";
+        track.style.height = 5 + trackNum * 2.5 + "em";
+        track.style.border = "1px solid var(--beat-color)";
+        track.style.borderRadius = "50%";
+        track.style.top = "50%";
+        track.style.left = "50%";
+        track.style.transform = "translate(-50%, -50%)";
 
-    const trackRadius = Math.min(trackRect.width, trackRect.height) / 2; // same anyway
-    const centerX = trackRect.left + trackRadius; // Center X of the track, accounting for its position
-    const centerY = trackRect.top + trackRadius; // Center Y of the track, accounting for its position
-    const beatRadius = parseFloat(getComputedStyle(beats[0]).width) / 2; // Radius of the beat
-    console.log("beatRadius:", beatRadius);
-    const angleIncrement = 360 / beats.length; // Angle between each beat, en degrés comme css
+        // Create and add beat elements
+        for (let i = 1; i <= beatCount; i++) {
+            const beat = document.createElement("div");
+            beat.className = track.id + "beat"; // Add a class to apply CSS styles if needed
+            // beat.id = `${track.id}Beat${i}`;
+            beat.style.position = "absolute";
+            beat.style.width = "1em";
+            beat.style.height = "1em";
+            beat.style.border = "1px solid var(--beat-color)";
+            beat.style.borderRadius = "50%";
+            beat.style.backgroundColor = "var(--test-color)";
+            beat.style.top = "50%";
+            beat.style.left = "50%";
+            beat.style.transform = "translate(-50%, -50%)";
+            beat.number = i;
+            beat.track = trackNum;
+            beat.played = false;
+            beat.innerHTML = beat.number + "";
+            track.appendChild(beat);
+        }
 
-    beats.forEach((beat, index) => {
-        const angle = angleIncrement * index - 90; // Angle for current beat, + rotation
-        const x = trackRadius * Math.cos((angle * Math.PI) / 180); // X position relative en radian (trigo)
-        const y = trackRadius * Math.sin((angle * Math.PI) / 180); // Y position relative to the center
+        // Append the track
+        player.appendChild(track);
 
-        // Position the beat
-        beat.style.position = "absolute";
-        beat.style.transform = `translate(${x - beatRadius}px, ${y - beatRadius}px)`;
-    }); // fin fonction. facto !!
+        const beats = document.querySelectorAll("." + track.id + "beat");
+        const trackRect = track.getBoundingClientRect(); // Get position and size of the track
+        /*
+        console.log("Top:", trackRect.top);
+        console.log("Right:", trackRect.right);
+        console.log("Bottom:", trackRect.bottom);
+        console.log("Left:", trackRect.left);
+        console.log("Width:", trackRect.width);
+        console.log("Height:", trackRect.height); // ok
+        */
 
-    function createNeedle() {
-        // delete previous needle ?
-    }
+        const trackRadius = Math.min(trackRect.width, trackRect.height) / 2; // same anyway
+        const beatRadius = parseFloat(getComputedStyle(beats[0]).width) / 2; // Radius of the beat
+        console.log("beatRadius:", beatRadius);
+        const angleIncrement = 360 / beats.length; // Angle between each beat, en degrés comme css
 
-    function createTrack(division, orbit) {
-        // this.number = 42
-        // this.beat = diameter;
+        console.log(beats.length);
+        rythmPattern[trackNum] = Array(beats.length).fill(false);
+        console.log(rythmPattern);
+        console.log(rythmPattern[trackNum]);
+
+        beats.forEach((beat, index) => {
+            const angle = angleIncrement * index - 90; // Angle for current beat, + rotation
+            const x = trackRadius * Math.cos((angle * Math.PI) / 180); // X position relative en radian (trigo)
+            const y = trackRadius * Math.sin((angle * Math.PI) / 180); // Y position relative to the center
+
+            // Position the beat
+            beat.style.position = "absolute";
+            beat.style.transform = `translate(${x - beatRadius}px, ${y - beatRadius}px)`;
+
+            // event to get rythm
+            beat.addEventListener("click", function (event) {
+                beat.played = !beat.played;
+                if (beat.played) {
+                    // color
+                    beat.style.backgroundColor = "silver";
+                    // rythm
+                    rythmPattern[beat.track][beat.number - 1] = beat.played;
+                } else {
+                    // color
+                    beat.style.backgroundColor = "black";
+                    // rythm
+                    rythmPattern[beat.track][beat.number - 1] = beat.played;
+                }
+                console.log(rythmPattern);
+            });
+        }); // fin fonction
     }
 
     addTrackButton.addEventListener("click", function (event) {
@@ -74,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inputBeat.setAttribute("name", "beat-" + nbTracks);
         inputBeat.id = "beat-" + nbTracks; // Set an ID to match the 'for' attribute in the label
         inputBeat.value = div.beat;
+        inputBeat.num = nbTracks;
         spanTrack.appendChild(inputBeat);
 
         div.appendChild(spanTrack);
@@ -84,18 +142,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (value && !div.isAdded) {
             div.isAdded = true;
             playButton.setAttribute("title", "Almost done!");
+
+            // Call the function to create a track with beats
+            createTrackWithBeats(nbTracks, inputBeat.value);
+
             // alert("Final value: " + value);
+            tracksSpan.innerHTML = "Number of Tracks: " + nbTracks;
+            root.style.setProperty("--beat-color", "silver");
             // increment track_nb
             nbTracks += 1;
-            tracksSpan.innerHTML = "Number of Tracks: " + (nbTracks - 1);
-            root.style.setProperty("--beat-color", "silver");
         }
         // draw cirle
 
         // Add event listener to inputBeat to detect when the field is modified
         inputBeat.addEventListener("change", function () {
             // new value
-            // redraw circle
+            // redraw circle and everything
+            createTrackWithBeats(inputBeat.num, inputBeat.value);
         });
     });
 });
