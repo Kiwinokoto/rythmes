@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 include("functions.php");
 
-setInitialValues("tempo", 30); // create session variables
+setInitialValues("tempo", 60); // create session variables
 setInitialValues("tracks_nb", 0);
 // setInitialValues("nbHidden", $_SESSION["nbSensors"] + 1);
 

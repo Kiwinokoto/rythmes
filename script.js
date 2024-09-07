@@ -1,19 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // qd la page est chargée
     //
-    var addTrackButton = document.getElementById("new_track"),
-        playButton = document.getElementById("playButton"),
+    var addTrackButton = document.getElementById("new_track"), // on recup les element html
+        playButton = document.getElementById("playButton"), // var... moderniser
         tracksSpan = document.getElementById("tracks_nb"),
         player = document.getElementById("player"),
-        nbTracks = 1,
+        tempo = document.getElementById("tempo"),
+        nbTracks = 1, // + qq variables
         screenCentreX = screen.availWidth / 2,
         screenCentreY = screen.availHeight / 2,
         unit = screen.availWidth / 16,
-        rythmPattern = [];
+        rythmPattern = [],
+        interval = [];
 
     const root = document.documentElement;
 
-    // function add track
-    // Function to create and add a track with beats
+    // click sur add track, ou modif + tard
+    // Function to (re)create and add a track with beats
+
     function createTrackWithBeats(trackNum, beatCount) {
         // delete if already exists
         const existingTrack = document.getElementById("track" + trackNum);
@@ -22,9 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // rythmPattern[trackNum] ? ;
         }
 
-        // Create the track container
+        // Create the track container (cercle)
         const track = document.createElement("div");
         track.id = "track" + trackNum;
+        track.num = trackNum;
         track.className = "track"; // Add a class to apply CSS styles if needed
         track.style.position = "absolute";
         track.style.width = 5 + trackNum * 2.5 + "em";
@@ -34,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         track.style.top = "50%";
         track.style.left = "50%";
         track.style.transform = "translate(-50%, -50%)";
+        track.isPlaying = false;
 
         // Create and add beat elements
         for (let i = 1; i <= beatCount; i++) {
@@ -104,9 +110,64 @@ document.addEventListener("DOMContentLoaded", () => {
                     rythmPattern[beat.track][beat.number - 1] = beat.played;
                 }
                 console.log(rythmPattern);
+                console.log(rythmPattern[trackNum]);
             });
-        }); // fin fonction
+        });
+
+        // start / stop playing
+        // right click on track in left menu
+
+        // trackDiv-
+
+        track.addEventListener("contextmenu", function (event) {
+            // Prevent the default context menu from appearing
+            event.preventDefault();
+
+            // This code will run for right clicks
+            console.log("Right click detected");
+
+            let bpm = tempo.value;
+            let period = 60000 / bpm; // en ms donc 2s pour tempo initial de 30 bpm
+            let pattern = rythmPattern[track.num];
+
+            // Function to play the rhythm
+            // sortir ?? redef a chaque click, pas opti
+            function playRhythm(piste) {
+                // piste = objet dom (div) + properties
+                let beatCount = 0;
+                piste.isPlaying = true;
+
+                // Start the interval loop to play beats based on the rhythm pattern
+                interval[track.num] = setInterval(() => {
+                    const shouldPlay = pattern[beatCount % pattern.length]; // Get whether to play or not
+                    if (shouldPlay) {
+                        playBeat(beatCount); // Only play if it's true in the pattern
+                    } else {
+                        console.log("Rest on beat", beatCount + 1); // Optional logging for rests
+                    }
+                    beatCount++;
+                }, period);
+            }
+            // Function to play individual beats
+            function playBeat(beatCount) {
+                console.log("Playing beat", beatCount + 1);
+                // Play a percussion sound (can use an actual audio file here)
+                let audio = new Audio("./sons/drum.wav"); // Replace with your sound file
+                audio.play();
+            }
+
+            // Start / stop rhythm on button right click
+            // If the track is playing, stop it by clearing the interval
+            if (!track.isPlaying) {
+                playRhythm(track);
+            } else {
+                track.isPlaying = false;
+                clearInterval(interval[track.num]); // Stop the interval when toggled off
+            }
+        });
     }
+
+    // Nouvelle piste
 
     addTrackButton.addEventListener("click", function (event) {
         // event.preventDefault(); // Not necessary here (button)
@@ -116,7 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
         div.id = "trackDiv-" + nbTracks;
         div.beat = 2 + nbTracks;
         div.className = "param";
+        div.classList.add("toggle");
         div.isAdded = false;
+        div.style.border = "2px solid black";
 
         var spanTrack = document.createElement("span");
         spanTrack.innerHTML = "Track " + nbTracks + ": ";
@@ -137,9 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
         div.appendChild(spanTrack);
         // insert it
         addTrackButton.parentNode.insertBefore(div, addTrackButton);
-        //
-        var value = inputBeat.value; // Get the final value after user has finished typing
-        if (value && !div.isAdded) {
+
+        // Get the final value after user has finished typing
+        if (inputBeat.value && !div.isAdded) {
             div.isAdded = true;
             playButton.setAttribute("title", "Almost done!");
 
@@ -159,6 +222,16 @@ document.addEventListener("DOMContentLoaded", () => {
             // new value
             // redraw circle and everything
             createTrackWithBeats(inputBeat.num, inputBeat.value);
+        });
+    });
+
+    // modif du tempo
+
+    tempo.addEventListener("change", function () {
+        // new values
+        const allTracks = document.querySelectorAll("track");
+        allTracks.forEach((track, index) => {
+            track.tempo = tempo.value; // maladroit. array comme patternes rythmiques ?
         });
     });
 });
