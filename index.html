@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121b">
+  <meta name="description" content="Rythmes : boîte à rythmes circulaire, polyrythmies et séquences euclidiennes.">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <title>Rythmes — Studio circulaire</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Rythmes, accueil">
+        <span class="brand-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span><strong>rythmes<span class="brand-dot">.</span></strong><small>STUDIO CIRCULAIRE</small></span>
+      </a>
+      <span class="topbar-note"><span class="live-dot"></span> Séquenceur musical • Web Audio</span>
+      <span class="local-pill">◉&nbsp; 100 % local</span>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">EXPLORATION MUSICALE <span class="eyebrow-line"></span> VERSION 2</div>
+          <h1>Le rythme prend <em>forme.</em></h1>
+          <p>Superpose des cercles, invente des polyrythmies et écoute ce qui se passe quand chaque piste suit son propre nombre de pas.</p>
+        </div>
+        <div class="hero-badge" aria-hidden="true"><span>4/4</span><small>1 tour<br>1 mesure</small></div>
+      </section>
+
+      <section class="transport" aria-label="Commandes de lecture">
+        <button type="button" class="play-button" id="playButton"><span id="playIcon" aria-hidden="true">▶</span><span id="playText">Écouter</span></button>
+        <div class="transport-separator"></div>
+        <div class="tempo-control">
+          <div class="control-top"><label for="tempoNumber">TEMPO</label><span class="hint">40–220 BPM</span></div>
+          <div class="tempo-line"><input type="number" id="tempoNumber" min="40" max="220" value="110" aria-label="Tempo en battements par minute"><span class="unit">BPM</span><input type="range" id="tempoSlider" min="40" max="220" value="110" aria-label="Régler le tempo"></div>
+        </div>
+        <div class="transport-separator volume-divider"></div>
+        <div class="volume-control">
+          <label for="volumeSlider">VOLUME</label>
+          <div class="volume-line"><span aria-hidden="true">◖))</span><input type="range" id="volumeSlider" min="0" max="100" value="74" aria-label="Volume général"><output id="volumeLabel">74 %</output></div>
+        </div>
+        <div class="transport-status" aria-live="polite"><span class="status-light" id="statusLight"></span><span id="statusText">À l'arrêt</span></div>
+      </section>
+
+      <section class="workspace">
+        <div class="visual-panel">
+          <div class="panel-heading"><div><span class="section-kicker">01 / VISUALISATION</span><h2>L'orbite</h2></div><span class="heading-meta">CLIQUE SUR LES POINTS</span></div>
+          <div class="orbit-wrap">
+            <div class="orbit-stage" id="orbitStage" aria-label="Pistes circulaires interactives">
+              <div class="orbit-grid" aria-hidden="true"></div>
+              <div class="orbit-rings" id="orbitRings"></div>
+              <div class="orbit-sweep" id="orbitSweep" aria-hidden="true"></div>
+              <div class="orbit-core" aria-hidden="true"><span class="core-symbol">◎</span><strong id="trackCountCore">04</strong><small>PISTES</small></div>
+            </div>
+          </div>
+          <div class="visual-footer"><span><i class="legend-dot active"></i> Son actif</span><span><i class="legend-dot"></i> Silence</span><span class="visual-footer-right">↻ Un tour = 4 temps</span></div>
+          <div class="preset-area">
+            <div class="preset-header"><span class="section-kicker">POINTS DE DÉPART</span><span class="hint">Remplace la composition actuelle</span></div>
+            <div class="preset-buttons"><button type="button" data-preset="house">✦ Groove house</button><button type="button" data-preset="odd">◈ Polyrythmie 3:5</button><button type="button" data-preset="minimal">○ Minimal</button></div>
+          </div>
+        </div>
+
+        <div class="tracks-panel">
+          <div class="panel-heading"><div><span class="section-kicker">02 / COMPOSITION</span><h2>Les pistes <span class="track-counter" id="trackCounter">4</span></h2></div><button type="button" id="addTrack" class="add-track">＋ Ajouter</button></div>
+          <div class="tracks-intro">Chaque cercle partage le même tempo. Son nombre de <strong>pas</strong> et ses <strong>frappes</strong> sont indépendants.</div>
+          <div class="tracks-list" id="tracksList"></div>
+          <div class="tip"><span class="tip-icon">✳</span><span><strong>Le savais-tu ?</strong> 3 pas sur un cercle et 5 sur un autre reviennent ensemble au début de chaque mesure, sans dérive.</span></div>
+        </div>
+      </section>
+    </main>
+    <footer><span>RYTHMES <span class="footer-muted">/ Expérimenter le temps</span></span><span id="saveStatus">Sauvegarde automatique dans ce navigateur</span><span>Pas de compte. Pas de base de données.</span></footer>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
